@@ -22,16 +22,26 @@ def clean_str(sentence):
     # sentence = re.sub("[\s+\.\!\/_,$%^*(+\"\')]+|[+——()?【】“”！，。？、~@#￥%……&*（）]+", "", sentence)
     return sentence
 
-def get_text_list(data_path,toy):
-    with open(data_path,'r',encoding='utf-8') as f:
-        if not toy:
-            return list(map(lambda x:clean_str(x['article'].strip()),f.readlines()))
-        else:
-            return list(map(lambda x:clean_str(x['article'].strip()),f.readlines()))[:45000]
+def get_text_list(data_path,toy,flag):
+    if flag=='article':
+        with open(data_path,'r',encoding='utf-8') as f:
+            if not toy:
+                return list(map(lambda x:clean_str(json.loads(x.strip())['article']),f.readlines()))
+            else:
+                return list(map(lambda x: clean_str(json.loads(x.strip())['article']), f.readlines()))[:45000]
+    if flag=='title':
+        with open(data_path,'r',encoding='utf-8') as f:
+            if not toy:
+                return list(map(lambda x:clean_str(json.loads(x.strip())['summarization']),f.readlines()))
+            else:
+                return list(map(lambda x: clean_str(json.loads(x.strip())['summarization']), f.readlines()))[:45000]
+
+def build_dict(step,toy=False):
+    if step=='train':
+        train_article_list=get_text_list(train_path,toy)
 
 
 if __name__ == '__main__':
-    data_path='data/train_data.txt'
     # with open(data_path, 'r', encoding='utf-8') as raw_file:
     #     for line in raw_file:
     #         line = line.strip('\r\n')
@@ -39,5 +49,6 @@ if __name__ == '__main__':
     #         sen=clean_str(data['article'])
     #         print(sen)
 
-    text_list=get_text_list(data_path,toy=False)
-    print(text_list)
+    # train_article_list=get_text_list(train_path,toy=False,flag='article')
+    train_title_list=get_text_list(train_path,toy=False,flag='title')
+    print(train_title_list)
