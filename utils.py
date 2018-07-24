@@ -8,9 +8,10 @@ from gensim.models.keyedvectors import KeyedVectors
 from gensim.test.utils import get_tmpfile
 from gensim.scripts.glove2word2vec import glove2word2vec
 
-train_path='data/preprocessed/train_data.txt'
-valid_path='data/preprocessed/valid_data.txt'
-
+# train_path='data/preprocessed/train_data.txt'
+# valid_path='data/preprocessed/valid_data.txt'
+train_path = 'data/sample/sample_train_data.txt'
+valid_path = 'data/sample/sample_valid_data.txt'
 def clean_str(sentence):
     """
     去除数字和字母

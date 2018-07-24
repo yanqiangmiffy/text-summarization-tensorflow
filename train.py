@@ -62,10 +62,10 @@ with tf.Session() as sess:
         batch_decoder_output=list(map(lambda x:list(x)+[word_dict["</s>"]],batch_y))
 
         batch_decoder_input=list(
-            map(lambda d:(summary_max_len-len(d))*[word_dict["<padding>"]],batch_decoder_input)
+            map(lambda d:d+(summary_max_len-len(d))*[word_dict["<padding>"]],batch_decoder_input)
         )
         batch_decoder_output = list(
-            map(lambda d: (summary_max_len - len(d)) * [word_dict["<padding>"]], batch_decoder_output)
+            map(lambda d:d+(summary_max_len - len(d)) * [word_dict["<padding>"]], batch_decoder_output)
         )
 
         train_feed_dict={
