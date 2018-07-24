@@ -98,6 +98,7 @@ def build_dataset(step,word_dict,article_max_len,summary_max_len,toy=False):
         title_list=get_text_list(valid_path,toy,flag='article')
     else:
         raise  NotImplementedError
+
     x=list(map(lambda d:d.split(' '),article_list))
     x=list(map(lambda d:list(map(lambda w:word_dict.get(w,word_dict["<unk>"]),d)),x))
     x=list(map(lambda d:d[:article_max_len],x))
@@ -126,7 +127,7 @@ def batch_iter(inputs,outputs,batch_size,num_epochs):
         for batch_num in range(num_batches_per_epoch):
             start_index=batch_num*batch_size
             end_index=min((batch_num+1)*batch_size,len(inputs))
-            yield inputs[start_index:end_index]
+            yield inputs[start_index:end_index],outputs[start_index:end_index]
 
 def get_init_embedding(reverse_dict,embedding_size):
     glove_file='glove/glove.50d.txt'
@@ -150,27 +151,30 @@ def get_init_embedding(reverse_dict,embedding_size):
     return np.array(word_vec_list)
 
 
-if __name__ == '__main__':
-    train_path = 'data/sample/sample_train_data.txt'
-    valid_path = 'data/sample/sample_valid_data.txt'
-
-    # with open(data_path, 'r', encoding='utf-8') as raw_file:
-    #     for line in raw_file:
-    #         line = line.strip('\r\n')
-    #         data=json.loads(line.strip())
-    #         sen=clean_str(data['article'])
-    #         print(sen)
-
-    train_article_list=get_text_list(train_path,toy=False,flag='article')
-    train_title_list=get_text_list(train_path,toy=False,flag='title')
-    print(train_title_list)
-
-    word_dict, reversed_dict, article_max_len, summary_max_len=build_dict(step='train')
-    # print(word_dict)
-    # print(reversed_dict)
-    # print(article_max_len)
-    # print(summary_max_len)
-
-    x,y=build_dataset('train',word_dict,article_max_len,summary_max_len,toy=False)
-    print(x)
-    print(y)
+# if __name__ == '__main__':
+#     train_path = 'data/sample/sample_train_data.txt'
+#     valid_path = 'data/sample/sample_valid_data.txt'
+#
+#     # with open(data_path, 'r', encoding='utf-8') as raw_file:
+#     #     for line in raw_file:
+#     #         line = line.strip('\r\n')
+#     #         data=json.loads(line.strip())
+#     #         sen=clean_str(data['article'])
+#     #         print(sen)
+#
+#     train_article_list=get_text_list(train_path,toy=False,flag='article')
+#     train_title_list=get_text_list(train_path,toy=False,flag='title')
+#     print(train_title_list)
+#
+#     word_dict, reversed_dict, article_max_len, summary_max_len=build_dict(step='train')
+#     # print(word_dict)
+#     # print(reversed_dict)
+#     # print(article_max_len)
+#     # print(summary_max_len)
+#
+#     x,y=build_dataset('train',word_dict,article_max_len,summary_max_len,toy=False)
+#     print(x)
+#     print(y)
+#
+#     vec=get_init_embedding(reversed_dict,embedding_size=50)
+#     print(vec)
