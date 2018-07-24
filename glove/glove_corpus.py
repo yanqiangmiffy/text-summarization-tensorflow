@@ -2,7 +2,7 @@ from utils import get_text_list
 # 路径设置
 train_path = 'data/preprocessed/train_data.txt'
 valid_path = 'data/preprocessed/valid_data.txt'
-glove_corpus_path = 'data/glove/glove_corpus'
+glove_corpus_path = 'glove_corpus'
 
 train_article=get_text_list(train_path,False,flag='article')
 train_title=get_text_list(train_path,False,flag='title')

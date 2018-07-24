@@ -1,2 +1,2 @@
-1. glove_corpus ：glove 语料
-2. glove.50d.txt: 训练的glove向量
+1. train_data.txt ：分词后的训练集
+2. valid_data.txt: 分词后的验证集

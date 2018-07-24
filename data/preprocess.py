@@ -5,7 +5,12 @@ stop_words=open('stop_words.txt','r',encoding='utf-8').read().split('\n')
 print(stop_words)
 
 def process(filename,target_filename):
-
+    """
+    对于文本进行分词，去除停用词
+    :param filename:
+    :param target_filename:
+    :return:
+    """
     print(filename+"on process....:\n")
 
     new_file=open(target_filename,'w',encoding='utf-8')
