@@ -8,8 +8,8 @@ from gensim.models.keyedvectors import KeyedVectors
 from gensim.test.utils import get_tmpfile
 from gensim.scripts.glove2word2vec import glove2word2vec
 
-train_path='data/train_data.txt'
-valid_path='data/evaluation_with_ground_truth.txt'
+train_path='data/preprocessed/train_data.txt'
+valid_path='data/preprocessed/valid_data.txt'
 
 def clean_str(sentence):
     """
@@ -17,7 +17,7 @@ def clean_str(sentence):
     :param sentence:
     :return:
     """
-    sentence = re.sub(r"[A-Za-z(),<>!?\'\`]+", " ", sentence)  # 去除英文字母和英文标点符号
+    sentence = re.sub(r"[A-Za-z(),<>!?\'\`]+", "", sentence)  # 去除英文字母和英文标点符号
     sentence = re.sub(r"[0-9]+", "num", sentence)  # 去除数字
     # sentence = re.sub("[\s+\.\!\/_,$%^*(+\"\')]+|[+——()?【】“”！，。？、~@#￥%……&*（）]+", "", sentence)
     return sentence
@@ -129,7 +129,7 @@ def batch_iter(inputs,outputs,batch_size,num_epochs):
             yield inputs[start_index:end_index]
 
 def get_init_embedding(reverse_dict,embedding_size):
-    glove_file='glove/glove.300d.txt'
+    glove_file='glove/glove.50d.txt'
     word2vec_file=get_tmpfile("word2vec.format.vec")
     glove2word2vec(glove_file,word2vec_file)
     print("loading Glove vectors...")
@@ -148,7 +148,12 @@ def get_init_embedding(reverse_dict,embedding_size):
     word_vec_list[3]=np.random.normal(0,1,embedding_size)
 
     return np.array(word_vec_list)
+
+
 if __name__ == '__main__':
+    train_path = 'data/sample/sample_train_data.txt'
+    valid_path = 'data/sample/sample_valid_data.txt'
+
     # with open(data_path, 'r', encoding='utf-8') as raw_file:
     #     for line in raw_file:
     #         line = line.strip('\r\n')
@@ -156,6 +161,16 @@ if __name__ == '__main__':
     #         sen=clean_str(data['article'])
     #         print(sen)
 
-    # train_article_list=get_text_list(train_path,toy=False,flag='article')
+    train_article_list=get_text_list(train_path,toy=False,flag='article')
     train_title_list=get_text_list(train_path,toy=False,flag='title')
     print(train_title_list)
+
+    word_dict, reversed_dict, article_max_len, summary_max_len=build_dict(step='train')
+    # print(word_dict)
+    # print(reversed_dict)
+    # print(article_max_len)
+    # print(summary_max_len)
+
+    x,y=build_dataset('train',word_dict,article_max_len,summary_max_len,toy=False)
+    print(x)
+    print(y)
