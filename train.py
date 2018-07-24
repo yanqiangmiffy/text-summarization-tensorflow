@@ -17,10 +17,9 @@ def add_arguments(parser):
     parser.add_argument("--beam_width",type=int,default=10,help="eam width for beam search decoder.")
     parser.add_argument("--glove",action="store_true", help="Use glove as initial word embedding.")
     parser.add_argument("--embedding_size", type=int, default=50, help="Word embedding size.")
-    parser.add_argument("--num_hidden",type=int,default=150,help="Network size.")
 
     parser.add_argument("--learning_rate", type=float, default=1e-3, help="Learning rate.")
-    parser.add_argument("--batch_size", type=int, default=64, help="Batch size.")
+    parser.add_argument("--batch_size", type=int, default=32, help="Batch size.")
     parser.add_argument("--num_epochs", type=int, default=10, help="Number of epochs.")
     parser.add_argument("--keep_prob", type=float, default=0.8, help="Dropout keep prob.")
 
@@ -68,3 +67,21 @@ with tf.Session() as sess:
         batch_decoder_output = list(
             map(lambda d: (summary_max_len - len(d)) * [word_dict["<padding>"]], batch_decoder_output)
         )
+
+        train_feed_dict={
+            model.batch_size:len(batch_x),
+            model.X:batch_x,
+            model.X_len:batch_x_len,
+            model.decoder_input:batch_decoder_input,
+            model.decoder_len:batch_decoder_len,
+            model.decoder_target:batch_decoder_output
+        }
+
+        _,step,loss=sess.run([model.update,model.global_step,model.loss],feed_dict=train_feed_dict)
+
+        if step % 1000==0:
+            print("step {0}:loss={1}".format(step,loss))
+
+        if step%num_batches_per_epoch==0:
+          saver.save(sess,"result/saved_model/model.ckpt",global_step=step)
+          print("Epoch {0}:Model is saved.".format(step//num_batches_per_epoch))
