@@ -11,7 +11,7 @@ def process(filename,target_filename):
     :param target_filename:
     :return:
     """
-    print(filename+"on process....:\n")
+    print(filename+" on process....:\n")
 
     new_file=open(target_filename,'w',encoding='utf-8')
     article_len=[]
@@ -49,5 +49,10 @@ def process(filename,target_filename):
     title_len_df = pd.DataFrame(title_len)
     print(title_len_df.describe())
 if __name__ == '__main__':
+<<<<<<< HEAD
     process('raw/evaluation_with_ground_truth.txt','all_valid_data.txt')
     process('raw/train_with_summ.txt','all_train_data.txt')
+=======
+    process('raw/evaluation_with_ground_truth.txt','preprocessed/valid_data.txt')
+    process('raw/train_with_summ.txt','preprocessed/train_data.txt')
+>>>>>>> b3c3aa566eb8d9dcf4c9a6fbbd507bd525e08454
