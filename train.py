@@ -12,14 +12,14 @@ def add_arguments(parser):
     :param parser:
     :return:
     """
-    parser.add_argument("--num_hidden",type=int,default=150,help="Network size.")
+    parser.add_argument("--num_hidden",type=int,default=32,help="Network size.")
     parser.add_argument("--num_layers",type=int,default=2,help="Network depth.")
-    parser.add_argument("--beam_width",type=int,default=10,help="eam width for beam search decoder.")
+    parser.add_argument("--beam_width",type=int,default=5,help="eam width for beam search decoder.")
     parser.add_argument("--glove",action="store_true", help="Use glove as initial word embedding.")
     parser.add_argument("--embedding_size", type=int, default=50, help="Word embedding size.")
 
     parser.add_argument("--learning_rate", type=float, default=1e-3, help="Learning rate.")
-    parser.add_argument("--batch_size", type=int, default=32, help="Batch size.")
+    parser.add_argument("--batch_size", type=int, default=16, help="Batch size.")
     parser.add_argument("--num_epochs", type=int, default=10, help="Number of epochs.")
     parser.add_argument("--keep_prob", type=float, default=0.8, help="Dropout keep prob.")
 
@@ -62,10 +62,10 @@ with tf.Session() as sess:
         batch_decoder_output=list(map(lambda x:list(x)+[word_dict["</s>"]],batch_y))
 
         batch_decoder_input=list(
-            map(lambda d:(summary_max_len-len(d))*[word_dict["<padding>"]],batch_decoder_input)
+            map(lambda d:d+(summary_max_len-len(d))*[word_dict["<padding>"]],batch_decoder_input)
         )
         batch_decoder_output = list(
-            map(lambda d: (summary_max_len - len(d)) * [word_dict["<padding>"]], batch_decoder_output)
+            map(lambda d:d+(summary_max_len - len(d)) * [word_dict["<padding>"]], batch_decoder_output)
         )
 
         train_feed_dict={

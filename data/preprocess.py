@@ -16,9 +16,11 @@ def process(filename,target_filename):
     new_file=open(target_filename,'w',encoding='utf-8')
     article_len=[]
     title_len=[]
+    num=0
 
     with open(filename,'r',encoding='utf-8') as raw_file:
         for line in raw_file:
+            num+=1
             data=json.loads(line.strip('\r\n'))
 
             article_words = []
@@ -39,12 +41,13 @@ def process(filename,target_filename):
             json_str=json.dumps(data, ensure_ascii=False)
 
             new_file.write(json_str+'\n')
-
+            if num==10000:
+                break
     article_len_df=pd.DataFrame(article_len)
     print(article_len_df.describe())
 
     title_len_df = pd.DataFrame(title_len)
     print(title_len_df.describe())
 if __name__ == '__main__':
-    process('raw/evaluation_with_ground_truth.txt','valid_data.txt')
-    process('raw/train_with_summ.txt','train_data.txt')
+    process('raw/evaluation_with_ground_truth.txt','all_valid_data.txt')
+    process('raw/train_with_summ.txt','all_train_data.txt')
