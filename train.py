@@ -12,15 +12,15 @@ def add_arguments(parser):
     :param parser:
     :return:
     """
-    parser.add_argument("--num_hidden",type=int,default=32,help="Network size.")
+    parser.add_argument("--num_hidden",type=int,default=96,help="Network size.")
     parser.add_argument("--num_layers",type=int,default=2,help="Network depth.")
-    parser.add_argument("--beam_width",type=int,default=5,help="eam width for beam search decoder.")
+    parser.add_argument("--beam_width",type=int,default=10,help="eam width for beam search decoder.")
     parser.add_argument("--glove",action="store_true", help="Use glove as initial word embedding.")
     parser.add_argument("--embedding_size", type=int, default=50, help="Word embedding size.")
 
     parser.add_argument("--learning_rate", type=float, default=1e-3, help="Learning rate.")
-    parser.add_argument("--batch_size", type=int, default=16, help="Batch size.")
-    parser.add_argument("--num_epochs", type=int, default=10, help="Number of epochs.")
+    parser.add_argument("--batch_size", type=int, default=32, help="Batch size.")
+    parser.add_argument("--num_epochs", type=int, default=30, help="Number of epochs.")
     parser.add_argument("--keep_prob", type=float, default=0.8, help="Dropout keep prob.")
 
     parser.add_argument("--toy", action="store_true",default=False, help="Use only 50K samples of data")
@@ -28,7 +28,7 @@ def add_arguments(parser):
 parser=argparse.ArgumentParser()
 add_arguments(parser)
 args=parser.parse_args()
-with open("args.pickle","wb") as out_data:
+with open("result/args.pickle","wb") as out_data:
     pickle.dump(args,out_data)
 # =======================end setting args====================
 
@@ -82,6 +82,6 @@ with tf.Session() as sess:
         if step % 1000==0:
             print("step {0}:loss={1}".format(step,loss))
 
-        if step%num_batches_per_epoch==0:
+        if step%(num_batches_per_epoch*5)==0:
           saver.save(sess,"result/saved_model/model.ckpt",global_step=step)
           print("Epoch {0}:Model is saved.".format(step//num_batches_per_epoch))
